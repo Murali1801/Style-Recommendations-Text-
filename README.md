@@ -18,6 +18,9 @@ A personalized fashion recommendation system that provides style advice based on
 ```
 ├── app.py                    # Flask API server
 ├── recommendation_system.py  # Core recommendation logic
+├── requirements.txt          # Python dependencies
+├── render.yaml              # Render deployment configuration
+├── .gitignore               # Git ignore file
 └── README.md                # This file
 ```
 
@@ -27,7 +30,7 @@ A personalized fashion recommendation system that provides style advice based on
 - Python 3.7 or higher
 - Flask
 
-### Installation
+### Local Development
 
 1. **Clone or download the project files**
 
@@ -42,6 +45,36 @@ A personalized fashion recommendation system that provides style advice based on
    ```
 
 The server will start on `http://localhost:5000`
+
+### Production Deployment
+
+#### Deploy on Render
+
+1. **Push your code to GitHub:**
+   ```bash
+   git init
+   git add .
+   git commit -m "Initial commit"
+   git branch -M main
+   git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git
+   git push -u origin main
+   ```
+
+2. **Deploy on Render:**
+   - Go to [render.com](https://render.com) and sign up/login
+   - Click "New +" → "Web Service"
+   - Connect your GitHub account and select your repository
+   - Configure:
+     - **Name**: `fashion-recommendation-api`
+     - **Environment**: `Python 3`
+     - **Build Command**: `pip install -r requirements.txt`
+     - **Start Command**: `gunicorn app:app`
+   - Click "Create Web Service"
+
+3. **Your API will be available at:**
+   ```
+   https://your-app-name.onrender.com
+   ```
 
 ## API Documentation
 
@@ -106,7 +139,7 @@ The server will start on `http://localhost:5000`
 
 #### Using cURL (Male)
 ```bash
-curl -X POST http://localhost:5000/recommend \
+curl -X POST https://your-app-name.onrender.com/recommend \
   -H "Content-Type: application/json" \
   -d '{
     "subject-height": 170.18,
@@ -122,7 +155,7 @@ curl -X POST http://localhost:5000/recommend \
 
 #### Using cURL (Female)
 ```bash
-curl -X POST http://localhost:5000/recommend \
+curl -X POST https://your-app-name.onrender.com/recommend \
   -H "Content-Type: application/json" \
   -d '{
     "subject-height": 160.0,
@@ -164,7 +197,7 @@ female_data = {
     "gender": "female"
 }
 
-response = requests.post('http://localhost:5000/recommend', json=male_data)
+response = requests.post('https://your-app-name.onrender.com/recommend', json=male_data)
 print(response.json())
 ```
 
@@ -225,10 +258,14 @@ python recommendation_system.py
 
 This will run tests with both male and female sample measurements and display the recommendations for both genders.
 
-### Test the API
+### Test the API Locally
 1. Start the server: `python app.py`
 2. Use Postman, cURL, or any HTTP client to send POST requests to `http://localhost:5000/recommend`
 3. Test with both male and female data to see gender-specific recommendations
+
+### Test the Deployed API
+1. Health check: `curl https://your-app-name.onrender.com/`
+2. Test recommendations: Use the cURL examples above with your deployed URL
 
 ## Error Handling
 
