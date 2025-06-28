@@ -10,9 +10,10 @@ def recommend():
     if not data:
         return jsonify({'error': 'No input data provided'}), 400
     
-    # Check for gender field if present
-    if 'gender' in data and data['gender'].lower() != 'male':
-        return jsonify({'error': 'This API currently only supports recommendations for men.'}), 400
+    # Check if gender is provided and is valid
+    gender = data.get('gender', 'male')
+    if gender.lower() not in ['male', 'female']:
+        return jsonify({'error': 'Gender must be either "male" or "female"'}), 400
     
     # Get recommendations from the recommendation system
     result = get_recommendations(data)
