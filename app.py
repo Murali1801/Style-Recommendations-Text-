@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from recommendation_system import get_recommendations
 import json
+import os
 
 app = Flask(__name__)
 
@@ -27,5 +28,16 @@ def recommend():
     else:
         return jsonify({'error': result['error']}), 500
 
+@app.route('/', methods=['GET'])
+def health_check():
+    return jsonify({
+        "status": "success",
+        "message": "Fashion Recommendation API is running!",
+        "endpoints": {
+            "POST /recommend": "Get fashion recommendations based on measurements"
+        }
+    })
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000) 
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port) 
